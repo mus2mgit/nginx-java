@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-java
+  labels:
+    app: nginx-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-java
+  template:
+    metadata:
+      labels:
+        app: nginx-java
+    spec:
+      containers:
+      - name: nginx-java
+        image: mus2mdocker/nginx-demo-content
+        ports:
+        - containerPort: 80
+        env:
+        - name: SPRING_PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: nginx-java-config-map
+              key: profile
+          name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config-map
+              key: database_url
